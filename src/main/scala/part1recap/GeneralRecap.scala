@@ -1,5 +1,7 @@
 package part1recap
 
+import scala.util.Try
+
 object GeneralRecap extends App {
   val aCondition: Boolean = false
 
@@ -69,5 +71,26 @@ object GeneralRecap extends App {
   val anonymousIncrementer = (x: Int) => x + 1
   // Int => Int === Function[Int, Int]
 
+  List(1,2,3).map(incrementer)
+
+  val pairs = for {
+    num <- List(1,2,3,4)
+    char <- List('a', 'b', 'c', 'd')
+  } yield num + "-" + char
+
+  val anOption = Some(2)
+
+  val aTry = Try {
+    throw new RuntimeException
+  }
+
+  val unknown = 2
+  val order = unknown match {
+    case 1 => "fitst"
+    case 2 => "second"
+    case _ => "unknown"
+  }
+
+  val bob = Person("Bob", 22)
 
 }
