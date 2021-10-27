@@ -9,27 +9,28 @@ object Ch14Exercise extends App {
    */
   val actorSystem = ActorSystem("Exercise")
 
-  case class Increment(amount : Int)
-  case class Decrement(amount : Int)
+  case object Increment
+  case object Decrement
+  case object Print
   class CounterActor extends Actor {
     var counter : Int = 0
     override def receive: Receive = counterReceive(0)
 
     def counterReceive(count : Int) : Receive = {
-      case Increment(amount) => context.become(counterReceive(count + amount))
-      case Decrement(amount) => context.become(counterReceive(count - amount))
-      case "print" => println(s"[${self}] count $count")
+      case Increment => context.become(counterReceive(count + 1))
+      case Decrement => context.become(counterReceive(count - 1))
+      case Print => println(s"[${self}] count $count")
     }
   }
 
   val aCounterActor = actorSystem.actorOf(Props[CounterActor], "counterActor")
 
-  aCounterActor ! Increment(1)
-  aCounterActor ! "print"
-  aCounterActor ! Increment(1)
-  aCounterActor ! "print"
-  aCounterActor ! Decrement(2)
-  aCounterActor ! "print"
+  aCounterActor ! Increment
+  aCounterActor ! Print
+  aCounterActor ! Increment
+  aCounterActor ! Print
+  aCounterActor ! Decrement
+  aCounterActor ! Print
 
   /**
    * 2 - simplified voting system
@@ -42,10 +43,10 @@ object Ch14Exercise extends App {
     override def receive: Receive = voteReceive(None)
 
     def voteReceive(target : Option[String]) : Receive = {
-      case Vote(candidate) => context.become(voteReceive(Some(candidate)))
+      case Vote(candidate) => context.become(voteReceive(Some(candidate)), false)
       case VoteStatusRequest => {
         sender() ! VoteStatusReply(target)
-        context.become(voteReceive(None))
+        context.unbecome()
       }
     }
   }
