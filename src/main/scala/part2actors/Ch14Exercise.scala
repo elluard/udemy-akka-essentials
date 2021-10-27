@@ -64,6 +64,11 @@ object Ch14Exercise extends App {
       }
     }
 
+    /**
+     * aggregateReceive 함수의 리턴타입은 PartialFunction[Any, Unit] 이다. 함수를 리턴하는 함수다.
+     * 즉, 커링이 되어있는 함수고, aggregateReceive(newResult, remainCount - 1) 는 함수를 리턴하고,
+     * 리턴한 함수는 메시지가 도착했을 때, 실행된다.
+     */
     def aggregateReceive(result : List[Option[String]], remainCount : Int) : Receive = {
       case VoteStatusReply(candidate) => {
         val newResult = candidate :: result
