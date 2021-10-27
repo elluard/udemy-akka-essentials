@@ -5,18 +5,12 @@ import akka.actor.ActorSystem
 object Playground extends App {
   val actorSystem = ActorSystem("HelloAkka")
 
-  type Receive = PartialFunction[Any, Unit]
-
   println(actorSystem.name)
 
-  def testFunction(a : Any): PartialFunction[Any, Unit] = { _ =>
+  def testFunction(a : Int): PartialFunction[Int, Int] = { b =>
     println(a)
+    b
   }
 
-  def topFunction(partialFunction: Receive): Unit = {
-    println("topFunction")
-    partialFunction()
-  }
-
-  topFunction(testFunction(1))
+  println(testFunction(1)(2))
 }
