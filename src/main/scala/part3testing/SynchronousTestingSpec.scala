@@ -7,6 +7,10 @@ import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.concurrent.duration.Duration
 
+/**
+ * akka 의 경우, ! 연산자를 사용하여 테스트를 하면, message 가 비동기적으로 전달된다.
+ * 로직 테스트를 위해 결과의 확인이 바로 필요할 때, synchronous test 를 통해 가능하다.
+ */
 class SynchronousTestingSpec extends AnyWordSpecLike with BeforeAndAfterAll {
   implicit val system = ActorSystem("SynchronousTestingSpec")
 
